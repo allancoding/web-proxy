@@ -18,7 +18,7 @@ for (var k in a) {
     global[k] = a[k];
 }
 global.debug = false;
-global.allowAdultContent = true;
+global.allowAdultContent = false;
 let port = 3000;
 //if you want to force a site to proxy, put url here
 //leave empty if not. Will set the client to absolute proxy mode
@@ -38,19 +38,12 @@ if (process.argv.includes('--port')) {
 
 global.sites = [ //no '/' at end
     //site, isBuggy, display_name
-    ['http://mikudb.moe', false, 'mikudb'],
-    ['https://nyaa.si', false, 'nyaa.si'],
-    ['https://downloads.khinsider.com', false, 'khinsider'],
     ['https://www.google.com', true, 'google'],
-    ['https://love-live.fandom.com', false, 'love live fandom'],
     ['https://www.youtube.com', true, 'youtube'],
-    ['https://schoolido.lu', false, 'schoolido.lu'],
     ['https://github.com', false, 'github'],
     ['https://emulatorjs.ga', false, 'emulatorjs'],
-    ['https://www.instagram.com', true, 'instagram'],
-    ['https://www1.thepiratebay3.to', false, 'the pirate bay'],
-    ['https://9anime.to', true, '9anime'],
-    ['https://www.webtoons.com', false, 'webtoons']
+    ['http://attack.smokewagon.org', false, 'attack.smokewagon.org'],
+    ['https://thecalculatorguy.ga', false, 'the calculator guy']
 ]
 
 async function yt(req, res) {
