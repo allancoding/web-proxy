@@ -95,7 +95,7 @@ var server = http.createServer(async function(req, res) {
         torrent(req, res);
         return;
     }
-    if (req.url.split('?')[0] === '/worker.js') {
+    if (req.url === '/worker.js?proxyWorker=true') {
         res.setHeader('content-type', 'text/javascript; chartset=utf-8');
         res.end(fs.readFileSync("worker.js", "utf8"));
         return;
@@ -170,11 +170,19 @@ var server = http.createServer(async function(req, res) {
         opts.proxyJSReplace = true;
     }
     var vc = args.vc, nc = args.nc;
-    var reqBody;
+    var reqBody = {};
     if (!consumed) {
-        reqBody = await consumeBody(req);
         if (req.headers['content-type'] && req.headers['content-type'].includes('x-www-form-urlencoded')) {
-            reqBody = Buffer.from(parseTextFile(reqBody.toString(), 'x-www-form-urlencoded', opts, url, host, false));
+            reqBody = {
+                data: Buffer.from(parseTextFile((await consumeBody(req)).toString(), 'x-www-form-urlencoded', opts, url, host, false)),
+                stream: false
+            };
+        } else {
+            reqBody = {
+                data: req,
+                stream: true,
+                length: req.headers['content-length']
+            };
         }
     }
     try {
@@ -215,7 +223,9 @@ var server = http.createServer(async function(req, res) {
             resp.headers[k] = 'https:'+resp.headers[k];
         }
         if (resp.headers[k].startsWith('/')) {
-            resp.headers[k] = 'https://'+(new URL(url)).hostname+resp.headers[k];
+            try {
+                resp.headers[k] = 'https://'+(new URL(url)).hostname+resp.headers[k];
+            } catch(e){}
         }
         if (typeof resp.headers[k] == 'string') {
             res.setHeader(k, resp.headers[k].replaceAll(opts.site2Proxy+'/', '/').replaceAll(opts.site2Proxy, '').replaceAll('http', '/http'));
