@@ -89,6 +89,15 @@ videoTitle.replaceAll(' ', '+') + '">Download</a></p>\n';
 }
 
 var server = http.createServer(async function(req, res) {
+    const userpass = Buffer.from(
+        (req.headers.authorization || '').split(' ')[1] || '',
+        'base64'
+    ).toString();
+    if (userpass !== process.env['usernameme'] +':'+process.env['passwordme']) {
+        res.writeHead(401, { 'WWW-Authenticate': 'Basic realm="nope"' });
+        res.end('HTTP Error 401 Unauthorized: Access is denied');
+        return;
+    }
     var host = req.headers.host;
     var url=req.url,method=req.method,consumed=false;
     if (req.url.split('?')[0] === '/torrentStream') {
