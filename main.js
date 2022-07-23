@@ -22,7 +22,12 @@ for (var k in a) {
 
 global.sites = [ //no '/' at end
     //site, isBuggy, display_name
-    ['https://simplewebserver.org/', false, 'Simple Web Server']
+    ['https://www.google.com', true, 'google'],
+    ['https://www.youtube.com', true, 'youtube'],
+    ['https://github.com', false, 'github'],
+    ['https://emulatorjs.ga', false, 'emulatorjs'],
+    ['http://attack.smokewagon.org', false, 'attack.smokewagon.org'],
+    ['https://thecalculatorguy.ga', false, 'the calculator guy']
 ]
 
 function connect(req, clientSocket, head) {

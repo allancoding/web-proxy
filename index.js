@@ -16,7 +16,7 @@ if (process.argv.includes('--site')) {
 
 var main = require('./main.js');
 var server = require('http').createServer(function(req, res) {
-    main.onRequest(req, res, {debug:false, allowAdultContent:true, yt:true, torrent:true, forceSite});
+    main.onRequest(req, res, {debug:false, allowAdultContent:false, yt:true, torrent:true, forceSite});
 });
 main.onStart(server);
 
